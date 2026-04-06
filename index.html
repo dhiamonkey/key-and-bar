@@ -1668,11 +1668,6 @@
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
     <script>
-      const form = document.querySelector("form");
-      const loading = document.querySelector(".loading");
-      const errorMsg = document.querySelector(".error-message");
-      const sentMsg = document.querySelector(".sent-message");
-
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
         loading.style.display = "block";
@@ -1684,14 +1679,19 @@
           body: new FormData(form),
         });
 
+        const data = await res.json(); // parse the response
+
         loading.style.display = "none";
 
-        if (res.ok) {
+        if (data.success) {
           sentMsg.style.display = "block";
+          errorMsg.style.display = "none"; // make sure error is hidden
           form.reset();
         } else {
-          errorMsg.textContent = "Something went wrong. Please try again.";
+          errorMsg.textContent =
+            data.message || "Something went wrong. Please try again.";
           errorMsg.style.display = "block";
+          sentMsg.style.display = "none"; // make sure success is hidden
         }
       });
     </script>
